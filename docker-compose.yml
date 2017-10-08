@@ -1,0 +1,11 @@
+version: '2'
+services:
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=bob
+      - POSTGRES_PASSWORD=password123
+    volumes:
+      - ./data:/var/lib/postgresql/data

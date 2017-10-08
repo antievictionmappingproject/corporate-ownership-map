@@ -1,0 +1,6 @@
+data/
+.DS_Store
+*.swp
+*.swo
+client/node_modules/
+rawdata/sf-ownership.csv

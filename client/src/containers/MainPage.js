@@ -28,12 +28,12 @@ export class MainPage extends React.Component {
       })
     }
     return (
-      <div>
+      <div class="row">
       	<Map
           style="mapbox://styles/mapbox/streets-v9"
           containerStyle={{
             height: "100vh",
-            width: "100vw"
+            width: "75vw"
           }}
           center={mapCenter}
           >
@@ -45,6 +45,7 @@ export class MainPage extends React.Component {
               {features}
           </Layer>
         </Map>
+        <CompanyTable {...this.props} />
       </div>
     )
   }

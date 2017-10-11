@@ -10,19 +10,15 @@ class ResponsiveTableWrapper extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      tableWidth: 800,
+      tableWidth: 200,
       tableHeight: 600
     }
   }
 
   handleResize () {
-    const padding = this.props.padding
-    const widthOffset = window.innerWidth < 680
-      ? padding.leftRight / 2 : padding.leftRight
-
     this.setState({
-      tableWidth: window.innerWidth - widthOffset,
-      tableHeight: window.innerHeight - padding.topBottom
+      tableWidth: window.innerWidth,
+      tableHeight: window.innerHeight
     })
   }
 
@@ -74,7 +70,6 @@ ResponsiveTableWrapper.propTypes = {
 
 ResponsiveTableWrapper.defaultProps = {
   refreshRate: 200, // ms
-  padding: {topBottom: 210, leftRight: 80}
 }
 
 export default ResponsiveTableWrapper

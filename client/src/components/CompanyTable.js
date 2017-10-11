@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Column, Cell } from 'fixed-data-table-2'
+import { Column, Cell, Table } from 'fixed-data-table-2'
 import { SortHeaderCell, DataCell } from './Cells'
 import ResponsiveTableWrapper from './ResponsiveTableWrapper'
 
@@ -22,7 +22,11 @@ class CompanyTable extends React.Component {
     debugger
     const headerCellProps = { sortBy, sortKey, sortDesc }
     return (
-      <div>
+      <div style={{width: '25%',
+          position: 'fixed',
+          height: '100%',
+          top: 0,
+          right: 0}}>
         <input className='filter-input' value={filterString}
           onChange={this.handleFilterStringChange()}
           type='search' placeholder='Filter Rows'
@@ -32,13 +36,15 @@ class CompanyTable extends React.Component {
         {!isFetching && data.length === 0 &&
           <h3 className='center'>No Matching Results :( </h3>}
 
-        <ResponsiveTableWrapper
+        <Table
+          width={400}
+          height={1000}
           rowHeight={50}
           headerHeight={50}
           rowsCount={data.length}>
           <Column
             columnKey='owner-address'
-            header={<SortHeaderCell {...headerCellProps}> Address </SortHeaderCell>} 
+            header={<SortHeaderCell {...headerCellProps}> Address </SortHeaderCell>}
             cell={<DataCell data={data} fetchProperties={fetchProperties}/>}
             flexGrow={3}
             width={100} />
@@ -54,7 +60,7 @@ class CompanyTable extends React.Component {
             cell={<DataCell data={data} fetchProperties={fetchProperties}/>}
             flexGrow={0.5}
             width={100} />
-        </ResponsiveTableWrapper>
+        </Table>
       </div>
     )
   }

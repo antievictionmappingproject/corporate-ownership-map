@@ -4,30 +4,28 @@ import { combineReducers } from 'redux'
 function handleAppActions (state = {}, action) {
   switch (action.type) {
     case ACTIONS.REQUEST_PROPERTY_DATA:
-      return {
+      return Object.assign({}, state, {
         isFetchingProperty: true
-      }
+      })
     case ACTIONS.RECEIVE_PROPERTY_DATA:
-      return {
+      return Object.assign({}, state, {
         isFetchingProperty: false,
         buildingLookupAddresses: action.data.buildings,
         companyNames: action.data.owners
-      }
+      })
     case ACTIONS.CLOSE_MODAL:
-      return {
+      return Object.assign({}, state, {
         closedModal: true,
-      }
+      })
     case ACTIONS.REQUEST_MAP_DATA:
-      debugger
-      return {
+      return Object.assign({}, state, {
         isFetchingMap: true,
-      }
+      })
     case ACTIONS.RECEIVE_MAP_DATA:
-      debugger
-      return {
+      return Object.assign({}, state, {
         isFetchingMap: false,
         allMapData: action.data
-      }
+      })
     default:
       return state
   }

@@ -8,7 +8,6 @@ function handleAppActions (state = {}, action) {
         isFetchingProperty: true
       }
     case ACTIONS.RECEIVE_PROPERTY_DATA:
-      debugger
       return {
         isFetchingProperty: false,
         buildingLookupAddresses: action.data.buildings,
@@ -17,6 +16,17 @@ function handleAppActions (state = {}, action) {
     case ACTIONS.CLOSE_MODAL:
       return {
         closedModal: true,
+      }
+    case ACTIONS.REQUEST_MAP_DATA:
+      debugger
+      return {
+        isFetchingMap: true,
+      }
+    case ACTIONS.RECEIVE_MAP_DATA:
+      debugger
+      return {
+        isFetchingMap: false,
+        allMapData: action.data
       }
     default:
       return state

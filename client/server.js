@@ -47,7 +47,16 @@ app.get('/property', (req, res) => {
       console.log(ret)
       res.send(ret)
     })
+})
 
+app.get('/mapdata', (req, res) => {
+  let llcQuery = {
+    text: 'SELECT  "sf-ownership"."owner-name", "sf-ownership"."owner-address", "sf-ownership".address, "sf-ownership".latitude, "sf-ownership".longitude FROM corp_owners INNER JOIN "sf-ownership" on "sf-ownership"."owner-address" = corp_owners."owner-address" WHERE "sf-ownership"."owner-name" ~ \'(\\w)+ (LLC|LP)\'',
+  }
+  client.query(llcQuery).then((r) => {
+    console.log(r.rows[0])
+    res.send(r.rows)
+  })
 })
 
 app.listen(port, function(error) {

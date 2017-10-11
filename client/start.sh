@@ -1,6 +1,4 @@
 #!/bin/bash
-docker-compose up &
-sleep 30
 export PGHOST='localhost'
 export PGUSER=bob
 export PGDATABASE=ownership

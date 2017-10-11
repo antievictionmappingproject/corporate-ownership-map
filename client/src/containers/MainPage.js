@@ -12,8 +12,8 @@ const Map = ReactMapboxGl({
 })
 
 export class MainPage extends React.Component {
-  closeModal () {
-    this.props.closeModal()
+  componentWillMount () {
+    this.props.fetchMapData()
   }
 
   render () {
@@ -40,7 +40,8 @@ export class MainPage extends React.Component {
           <Layer
             type="symbol"
             id="marker"
-            layout={{ "icon-image": "marker-15" }}>
+            layout={{ "icon-image": "marker-15" }}
+          >
               {features}
           </Layer>
         </Map>
@@ -54,7 +55,9 @@ const mapStateToProps = (state) => ({
           isFetchingProperty: state.handleAppActions.isFetchingProperty,
           buildingLookupAddresses: state.handleAppActions.buildingLookupAddresses,
           closedModal: state.handleAppActions.closedModal,
-          companyNames: state.handleAppActions.companyNames
+          companyNames: state.handleAppActions.companyNames,
+          allMapData: state.handleAppActions.allMapData,
+          isFetchingMap: state.handleAppActions.isFetchingMap,
         })
 const mapDispatchToProps = (dispatch) => bindActionCreators(actions, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage)

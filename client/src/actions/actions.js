@@ -9,8 +9,10 @@ export const ACTIONS = keymirror({
   SORT_COMPANY_DATA: null,
   REQUEST_PROPERTY_DATA: null,
   RECEIVE_PROPERTY_DATA: null,
-  CLOSE_MODAL: null
-/*
+  CLOSE_MODAL: null,
+  REQUEST_MAP_DATA:null,
+  RECEIVE_MAP_DATA:null,
+  /*
   SET_ERROR_MESSAGE: null,
   RESET_ERROR_MESSAGE: null
 */
@@ -58,6 +60,13 @@ const apiProps = {
   }
 }
 
+const mapAPIProps = {
+  url: "/mapdata",
+  types: {
+    request: ACTIONS.REQUEST_MAP_DATA,
+    receive: ACTIONS.RECEIVE_MAP_DATA
+  }
+}
 function fetchPropertyOpts(base, queryParams) {
   return {
     url: base + "?" + querystring.stringify(queryParams),
@@ -131,4 +140,16 @@ function fetchProperties (propertyLookup) {
   }
 }
 
-export default { fetchData, sortBy, filterBy, fetchProperties, closeModal }
+function shouldFetchMapData ({handleAppActions}) {
+  return (!handleAppActions.isFetchingMap)
+}
+function fetchMapData() {
+  return (dispatch, getState) => {
+    if (shouldFetchData(getState())) {
+      return dispatch(fetchDispatch(mapAPIProps))
+    }
+  }
+}
+
+
+export default { fetchData, sortBy, filterBy, fetchProperties, closeModal, fetchMapData }

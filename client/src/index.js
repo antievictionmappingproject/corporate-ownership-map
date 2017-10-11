@@ -3,6 +3,10 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import App from './containers/App'
 import configureStore from './store/configureStore'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
 
 // Define the initial state properties here
 const initialAppState = {

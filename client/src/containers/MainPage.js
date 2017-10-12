@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import actions from '../actions/actions'
 import ReactMapboxGl, { Layer, Feature }  from 'react-mapbox-gl'
+import chroma from 'chroma-js'
 
 const mapCenter = [-122.431297, 37.7749]
 
@@ -19,17 +20,23 @@ export class MainPage extends React.Component {
   render () {
     let { isFetchingMap, allMapData } = this.props
     let features = []
-    let j = 0
+    let stops = []
+    let k = 0
     if (!isFetchingMap && typeof allMapData !== "undefined") {
+      let scales = chroma.scale(['#fafa6e','#2A4858']).mode('lch').colors(Object.keys(allMapData).length)
       for (const [j, ownerAddress] of Object.entries(allMapData)) {
+          let innerStops = [j, scales[k]]
           let f = ownerAddress.map((d, i) => {
             return (
-              <Feature coordinates={[d.longitude, d.latitude]} key={i}/>
+              <Feature coordinates={[d.longitude, d.latitude]} key={i} properties={{'owner-address': j}}/>
             )
           })
           features.push.apply(features, f)
+          stops.push(innerStops)
+          k++
       }
     }
+    console.log(stops[2])
     return (
       <div class="row">
       	<Map
@@ -41,9 +48,21 @@ export class MainPage extends React.Component {
           center={mapCenter}
           >
           <Layer
-            type="symbol"
+            type="circle"
             id="marker"
-            layout={{ "icon-image": "marker-15" }}
+            paint={{
+            // make circles larger as the user zooms from z12 to z22
+            'circle-radius': {
+                'base': 1.75,
+                'stops': [[12, 2], [22, 180]]
+            },
+            // color circles by ethnicity, using data-driven styles
+            'circle-color': {
+              property: 'owner-address',
+              type: "categorical",
+              stops: stops,
+              },
+            }}
           >
               {features}
           </Layer>

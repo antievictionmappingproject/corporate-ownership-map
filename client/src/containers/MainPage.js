@@ -19,13 +19,16 @@ export class MainPage extends React.Component {
   render () {
     let { isFetchingMap, allMapData } = this.props
     let features = []
-
+    let j = 0
     if (!isFetchingMap && typeof allMapData !== "undefined") {
-      features = allMapData.map((d,i) => {
-         return (
-          <Feature coordinates={[d.longitude, d.latitude]} key={i}/>
-         )
-      })
+      for (const [j, ownerAddress] of Object.entries(allMapData)) {
+          let f = ownerAddress.map((d, i) => {
+            return (
+              <Feature coordinates={[d.longitude, d.latitude]} key={i}/>
+            )
+          })
+          features.push.apply(features, f)
+      }
     }
     return (
       <div class="row">

@@ -22,6 +22,8 @@ export class MainPage extends React.Component {
     let features = []
     let stops = []
     let k = 0
+    let paint = {}
+
     if (!isFetchingMap && typeof allMapData !== "undefined") {
       let scales = chroma.scale(['#fafa6e','#2A4858']).mode('lch').colors(Object.keys(allMapData).length)
       for (const [j, ownerAddress] of Object.entries(allMapData)) {
@@ -35,12 +37,22 @@ export class MainPage extends React.Component {
           stops.push(innerStops)
           k++
       }
+
+      paint['circle-radius'] = {
+          'base': 1.75,
+          'stops': [[12, 2], [22, 180]]
+      }
+      // color circles by ethnicity, using data-driven styles
+      paint['circle-color'] = {
+        property: 'owner-address',
+        type: "categorical",
+        stops: stops,
+      }
     }
-    console.log(stops[2])
     return (
       <div class="row">
       	<Map
-          style="mapbox://styles/mapbox/streets-v9"
+          style="mapbox://styles/jbcima/cj8mqv1b562ch2rnzsw6l1qkc"
           containerStyle={{
             height: "100vh",
             width: "75vw"
@@ -50,19 +62,7 @@ export class MainPage extends React.Component {
           <Layer
             type="circle"
             id="marker"
-            paint={{
-            // make circles larger as the user zooms from z12 to z22
-            'circle-radius': {
-                'base': 1.75,
-                'stops': [[12, 2], [22, 180]]
-            },
-            // color circles by ethnicity, using data-driven styles
-            'circle-color': {
-              property: 'owner-address',
-              type: "categorical",
-              stops: stops,
-              },
-            }}
+            paint={paint}
           >
               {features}
           </Layer>

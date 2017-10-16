@@ -26,6 +26,11 @@ function handleAppActions (state = {}, action) {
         isFetchingMap: false,
         allMapData: action.data
       })
+    case ACTIONS.CLICK_PROPERTY:
+      return Object.assign({}, state, {
+        hasClickedProperty: true,
+        clickedProperty: action.data,
+      })
     default:
       return state
   }

@@ -12,6 +12,7 @@ export const ACTIONS = keymirror({
   CLOSE_MODAL: null,
   REQUEST_MAP_DATA:null,
   RECEIVE_MAP_DATA:null,
+  CLICK_PROPERTY:null,
   /*
   SET_ERROR_MESSAGE: null,
   RESET_ERROR_MESSAGE: null
@@ -103,17 +104,17 @@ function fetchData () {
   }
 }
 
-function sortBy (sortKey) { 
+function sortBy (sortKey) {
   return {
     type: ACTIONS.SORT_COMPANY_DATA,
     sortKey
   }
 }
 
-function filterBy (filterString)  { 
+function filterBy (filterString)  {
   return {
     type: ACTIONS.FILTER_COMPANY_DATA,
-    filterString  
+    filterString
   }
 }
 
@@ -143,6 +144,7 @@ function fetchProperties (propertyLookup) {
 function shouldFetchMapData ({handleAppActions}) {
   return (!handleAppActions.isFetchingMap)
 }
+
 function fetchMapData() {
   return (dispatch, getState) => {
     if (shouldFetchData(getState())) {
@@ -151,5 +153,12 @@ function fetchMapData() {
   }
 }
 
+function propertyOnClick(propertyObj) {
+  debugger
+  return {
+    type: ACTIONS.CLICK_PROPERTY,
+    data: propertyObj
+  }
+}
 
-export default { fetchData, sortBy, filterBy, fetchProperties, closeModal, fetchMapData }
+export default { fetchData, sortBy, filterBy, fetchProperties, closeModal, fetchMapData, propertyOnClick }

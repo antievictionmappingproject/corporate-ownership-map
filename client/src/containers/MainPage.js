@@ -3,7 +3,7 @@ import CompanyTable from '../components/CompanyTable'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import actions from '../actions/actions'
-import ReactMapboxGl, { Layer, Feature }  from 'react-mapbox-gl'
+import ReactMapboxGl, { Feature, Layer, Popup }  from 'react-mapbox-gl'
 import chroma from 'chroma-js'
 
 const mapCenter = [-122.431297, 37.7749]
@@ -18,19 +18,38 @@ export class MainPage extends React.Component {
   }
 
   render () {
-    let { isFetchingMap, allMapData } = this.props
+    let { isFetchingMap, allMapData, clickedProperty, hasClickedProperty } = this.props
     let features = []
     let stops = []
     let k = 0
     let paint = {}
-
+    let popup = <Feature/>
+    debugger
+    if (hasClickedProperty) {
+    popup = (
+      <Popup
+          key={1}
+          offset={[0, -50]}
+          coordinates={clickedProperty.coordinates}
+      >
+          Owner Name: {clickedProperty['owner-name']}
+          <br/>
+          Owner Address: {clickedProperty['owner-address']}
+      </Popup>
+    )
+    }
     if (!isFetchingMap && typeof allMapData !== "undefined") {
       let scales = chroma.scale(['#fafa6e','#2A4858']).mode('lch').colors(Object.keys(allMapData).length)
       for (const [j, ownerAddress] of Object.entries(allMapData)) {
           let innerStops = [j, scales[k]]
           let f = ownerAddress.map((d, i) => {
+            let propertyFeatures = {
+              'owner-address': j,
+              'owner-name': d['owner-name'],
+              coordinates: [d.longitude, d.latitude]
+            }
             return (
-              <Feature coordinates={[d.longitude, d.latitude]} key={i} properties={{'owner-address': j}}/>
+              <Feature coordinates={[d.longitude, d.latitude]} key={i} properties={{'owner-address': j}} onClick={(() => this.props.propertyOnClick(propertyFeatures)).bind(this)}/>
             )
           })
           features.push.apply(features, f)
@@ -66,6 +85,7 @@ export class MainPage extends React.Component {
           >
               {features}
           </Layer>
+          {popup}
         </Map>
         <CompanyTable {...this.props} />
       </div>
@@ -81,6 +101,9 @@ const mapStateToProps = (state) => ({
           companyNames: state.handleAppActions.companyNames,
           allMapData: state.handleAppActions.allMapData,
           isFetchingMap: state.handleAppActions.isFetchingMap,
+          clickedProperty: state.handleAppActions.clickedProperty,
+          hasClickedProperty: state.handleAppActions.hasClickedProperty,
         })
+
 const mapDispatchToProps = (dispatch) => bindActionCreators(actions, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage)

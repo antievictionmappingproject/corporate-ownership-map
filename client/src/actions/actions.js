@@ -13,6 +13,7 @@ export const ACTIONS = keymirror({
   REQUEST_MAP_DATA:null,
   RECEIVE_MAP_DATA:null,
   CLICK_PROPERTY:null,
+  CLICK_BACK:null,
   /*
   SET_ERROR_MESSAGE: null,
   RESET_ERROR_MESSAGE: null
@@ -118,6 +119,12 @@ function filterBy (filterString)  {
   }
 }
 
+function backToTable () {
+  return {
+    type: ACTIONS.CLICK_BACK,
+  }
+}
+
 function closeModal () {
   return {
     type: ACTIONS.CLOSE_MODAL,
@@ -154,11 +161,10 @@ function fetchMapData() {
 }
 
 function propertyOnClick(propertyObj) {
-  debugger
   return {
     type: ACTIONS.CLICK_PROPERTY,
     data: propertyObj
   }
 }
 
-export default { fetchData, sortBy, filterBy, fetchProperties, closeModal, fetchMapData, propertyOnClick }
+export default { fetchData, sortBy, filterBy, fetchProperties, closeModal, fetchMapData, propertyOnClick , backToTable}

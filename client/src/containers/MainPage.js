@@ -1,5 +1,6 @@
 import React from 'react'
 import CompanyTable from '../components/CompanyTable'
+import CompanySideList from '../components/CompanySideList'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import actions from '../actions/actions'
@@ -13,18 +14,30 @@ const Map = ReactMapboxGl({
 })
 
 export class MainPage extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      hasLocalFeatures: false,
+      cachedFeatures: [],
+      cachedPaint:[],
+    }
+  }
+
   componentWillMount () {
     this.props.fetchMapData()
   }
 
   render () {
-    let { isFetchingMap, allMapData, clickedProperty, hasClickedProperty } = this.props
+    let { isFetchingProperty, isFetchingMap, allMapData, clickedProperty, hasClickedProperty, companyNames, showTable, sidebarOwnerAddress } = this.props
+    let { hasLocalFeatures, cachedFeatures, cachedPaint } = this.state
     let features = []
     let stops = []
     let k = 0
     let paint = {}
     let popup = <Feature/>
-    debugger
+    let sidebar = <CompanyTable {...this.props} />
+
     if (hasClickedProperty) {
     popup = (
       <Popup
@@ -38,7 +51,17 @@ export class MainPage extends React.Component {
       </Popup>
     )
     }
-    if (!isFetchingMap && typeof allMapData !== "undefined") {
+    debugger
+    if (!isFetchingProperty && companyNames && companyNames.length > 0 && !showTable) {
+      sidebar = <CompanySideList companyNames={companyNames} ownerAddress={sidebarOwnerAddress} backToTable={this.props.backToTable} />
+    }
+
+    if (hasLocalFeatures) {
+      features = cachedFeatures
+      paint = cachedPaint
+    }
+
+    if (!hasLocalFeatures && !isFetchingMap && typeof allMapData !== "undefined") {
       let scales = chroma.scale(['#fafa6e','#2A4858']).mode('lch').colors(Object.keys(allMapData).length)
       for (const [j, ownerAddress] of Object.entries(allMapData)) {
           let innerStops = [j, scales[k]]
@@ -67,6 +90,7 @@ export class MainPage extends React.Component {
         type: "categorical",
         stops: stops,
       }
+      this.setState({hasLocalFeatures: true, cachedFeatures: features, cachedPaint: paint})
     }
     return (
       <div class="row">
@@ -87,7 +111,7 @@ export class MainPage extends React.Component {
           </Layer>
           {popup}
         </Map>
-        <CompanyTable {...this.props} />
+        {sidebar}
       </div>
     )
   }
@@ -103,6 +127,8 @@ const mapStateToProps = (state) => ({
           isFetchingMap: state.handleAppActions.isFetchingMap,
           clickedProperty: state.handleAppActions.clickedProperty,
           hasClickedProperty: state.handleAppActions.hasClickedProperty,
+          showTable: state.handleAppActions.showTable,
+          sidebarOwnerAddress:state.handleAppActions.sidebarOwnerAddress,
         })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators(actions, dispatch)

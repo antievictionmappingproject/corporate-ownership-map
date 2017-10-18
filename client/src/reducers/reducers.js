@@ -5,13 +5,15 @@ function handleAppActions (state = {}, action) {
   switch (action.type) {
     case ACTIONS.REQUEST_PROPERTY_DATA:
       return Object.assign({}, state, {
-        isFetchingProperty: true
+        isFetchingProperty: true,
+        showTable: false
       })
     case ACTIONS.RECEIVE_PROPERTY_DATA:
       return Object.assign({}, state, {
         isFetchingProperty: false,
         buildingLookupAddresses: action.data.buildings,
-        companyNames: action.data.owners
+        companyNames: action.data.owners,
+        sidebarOwnerAddress: action.data.ownerAddress,
       })
     case ACTIONS.CLOSE_MODAL:
       return Object.assign({}, state, {
@@ -30,6 +32,10 @@ function handleAppActions (state = {}, action) {
       return Object.assign({}, state, {
         hasClickedProperty: true,
         clickedProperty: action.data,
+      })
+    case ACTIONS.CLICK_BACK:
+      return Object.assign({}, state, {
+        showTable: true,
       })
     default:
       return state

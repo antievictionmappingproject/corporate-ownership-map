@@ -41,6 +41,7 @@ app.get('/property', (req, res) => {
   Promise.all([buildingQuery, ownerQuery])
     .then(data => {
       let ret = {
+        ownerAddress: ownerAddress,
         buildings: data[0].rows,
         owners: data[1].rows
       }

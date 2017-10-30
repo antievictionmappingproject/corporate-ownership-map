@@ -15,7 +15,7 @@ const app = new express()
 const port = 3001
 
 app.get('/data', (req, res) => {
-  client.query('SELECT * FROM corp_owners ORDER BY "total-units" DESC').then((r) => {
+  client.query('SELECT * FROM corp_owners ORDER BY "total-units" DESC LIMIT 100').then((r) => {
     console.log(r.rows[1])
     res.send({data: r.rows.slice(0,1000)})
   })
@@ -52,7 +52,7 @@ app.get('/property', (req, res) => {
 
 app.get('/mapdata', (req, res) => {
   let llcQuery = {
-    text: 'SELECT "sf-ownership"."owner-address", "sf-ownership"."owner-name", "sf-ownership".address, "sf-ownership".latitude, "sf-ownership".longitude FROM corp_owners INNER JOIN "sf-ownership" on "sf-ownership"."owner-address" = corp_owners."owner-address" WHERE "sf-ownership"."owner-name" ~ \'(\\w)+ (LLC|LP)\' GROUP BY  "sf-ownership"."owner-address", "sf-ownership".address, "sf-ownership"."owner-name","sf-ownership".latitude, "sf-ownership".longitude ORDER BY "owner-address" DESC',
+    text: 'SELECT  "sf-ownership"."owner-address", "sf-ownership"."owner-name", "sf-ownership".address, "sf-ownership".latitude, "sf-ownership".longitude FROM (SELECT * FROM corp_owners ORDER BY "total-units" DESC LIMIT 100) topcorp INNER JOIN "sf-ownership" on "sf-ownership"."owner-address" = topcorp."owner-address" WHERE "sf-ownership"."owner-name" ~ \'(\\w)+ (LLC|LP)\' GROUP BY "sf-ownership"."owner-address", "sf-ownership".address, "sf-ownership"."owner-name","sf-ownership".latitude, "sf-ownership".longitude ORDER BY "owner-address" DESC',
   }
   client.query(llcQuery).then((r) => {
     let ret = {}

@@ -22,7 +22,7 @@ class CompanyTable extends React.Component {
     debugger
     const headerCellProps = { sortBy, sortKey, sortDesc }
     return (
-      <div style={{width: '25%',
+      <div style={{width: '38%',
           position: 'fixed',
           height: '100%',
           top: 0,
@@ -37,7 +37,7 @@ class CompanyTable extends React.Component {
           <h3 className='center'>No Matching Results :( </h3>}
 
         <Table
-          width={400}
+          width={600}
           height={1000}
           rowHeight={50}
           headerHeight={50}

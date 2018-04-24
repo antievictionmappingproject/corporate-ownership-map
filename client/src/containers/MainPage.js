@@ -4,23 +4,22 @@ import CompanySideList from '../components/CompanySideList'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import actions from '../actions/actions'
-import ReactMapboxGl, { Feature, Layer, Popup }  from 'react-mapbox-gl'
+import ReactMapboxGl, { Feature, Layer, Popup } from 'react-mapbox-gl'
 import chroma from 'chroma-js'
 
 const mapCenter = [-122.431297, 37.7749]
 
 const Map = ReactMapboxGl({
-  accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
+  accessToken: process.env.REACT_APP_MAPBOX_TOKEN
 })
 
 export class MainPage extends React.Component {
-
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       hasLocalFeatures: false,
       cachedFeatures: [],
-      cachedPaint:[],
+      cachedPaint: []
     }
   }
 
@@ -35,23 +34,25 @@ export class MainPage extends React.Component {
     let stops = []
     let k = 0
     let paint = {}
-    let popup = <Feature/>
+    let popup = <Feature />
     let sidebar = <CompanyTable {...this.props} />
 
     if (hasClickedProperty) {
-    popup = (
-      <Popup
+      popup = (
+        <Popup
           key={1}
           offset={[0, -50]}
           coordinates={clickedProperty.coordinates}
-      >
+        >
           Owner Name: {clickedProperty['owner-name']}
-          <br/>
+          <br />
           Owner Address: {clickedProperty['owner-address']}
-      </Popup>
-    )
+          <br />
+          Property Address: {clickedProperty.address}
+        </Popup>
+      )
     }
-    debugger
+
     if (!isFetchingProperty && companyNames && companyNames.length > 0 && !showTable) {
       sidebar = <CompanySideList companyNames={companyNames} ownerAddress={sidebarOwnerAddress} backToTable={this.props.backToTable} />
     }
@@ -61,56 +62,60 @@ export class MainPage extends React.Component {
       paint = cachedPaint
     }
 
-    if (!hasLocalFeatures && !isFetchingMap && typeof allMapData !== "undefined") {
-      let scales = chroma.scale(['#fafa6e','#2A4858']).mode('lch').colors(Object.keys(allMapData).length)
+    if (!hasLocalFeatures && !isFetchingMap && typeof allMapData !== 'undefined') {
+      let scales = chroma.scale(['#fafa6e', '#2A4858']).mode('lch').colors(Object.keys(allMapData).length)
       for (const [j, ownerAddress] of Object.entries(allMapData)) {
-          let innerStops = [j, scales[k]]
-          let f = ownerAddress.map((d, i) => {
-            let propertyFeatures = {
-              'owner-address': j,
-              'owner-name': d['owner-name'],
-              coordinates: [d.longitude, d.latitude]
-            }
-            return (
-              <Feature coordinates={[d.longitude, d.latitude]} key={i} properties={{'owner-address': j}} onClick={(() => this.props.propertyOnClick(propertyFeatures)).bind(this)}/>
-            )
-          })
-          features.push.apply(features, f)
-          stops.push(innerStops)
-          k++
+        let innerStops = [j, scales[k]]
+        let f = ownerAddress.map((d, i) => {
+          let propertyFeatures = {
+            'owner-address': j,
+            'owner-name': d['owner-name'],
+            coordinates: [d.longitude, d.latitude],
+            address: d.address
+
+          }
+          return (
+            <Feature coordinates={[d.longitude, d.latitude]} key={i} properties={{'owner-address': j}} onClick={(() => this.props.propertyOnClick(propertyFeatures))} />
+          )
+        })
+        features.push.apply(features, f)
+        stops.push(innerStops)
+        k++
       }
 
       paint['circle-radius'] = {
-          'base': 1.75,
-          'stops': [[12, 2], [22, 180]]
+        'base': 1.75,
+        'stops': [[12, 2], [22, 180]]
       }
       // color circles by ethnicity, using data-driven styles
       paint['circle-color'] = {
         property: 'owner-address',
-        type: "categorical",
-        stops: stops,
+        type: 'categorical',
+        stops: stops
       }
       this.setState({hasLocalFeatures: true, cachedFeatures: features, cachedPaint: paint})
     }
     return (
-      <div class="row">
-      	<Map
-          style="mapbox://styles/jbcima/cj8mqv1b562ch2rnzsw6l1qkc"
-          containerStyle={{
-            height: "100vh",
-            width: "75vw"
-          }}
-          center={mapCenter}
+      <div class='row'>
+        <div style={{float: 'left', height: '100%'}}>
+          <Map
+            style='mapbox://styles/jbcima/cj8mqv1b562ch2rnzsw6l1qkc'
+            containerStyle={{
+              height: '100vh',
+              width: '62vw'
+            }}
+            center={mapCenter}
           >
-          <Layer
-            type="circle"
-            id="marker"
-            paint={paint}
-          >
+            <Layer
+              type='circle'
+              id='marker'
+              paint={paint}
+            >
               {features}
-          </Layer>
-          {popup}
-        </Map>
+            </Layer>
+            {popup}
+          </Map>
+        </div>
         {sidebar}
       </div>
     )
@@ -118,18 +123,18 @@ export class MainPage extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-          table: state.table,
-          isFetchingProperty: state.handleAppActions.isFetchingProperty,
-          buildingLookupAddresses: state.handleAppActions.buildingLookupAddresses,
-          closedModal: state.handleAppActions.closedModal,
-          companyNames: state.handleAppActions.companyNames,
-          allMapData: state.handleAppActions.allMapData,
-          isFetchingMap: state.handleAppActions.isFetchingMap,
-          clickedProperty: state.handleAppActions.clickedProperty,
-          hasClickedProperty: state.handleAppActions.hasClickedProperty,
-          showTable: state.handleAppActions.showTable,
-          sidebarOwnerAddress:state.handleAppActions.sidebarOwnerAddress,
-        })
+  table: state.table,
+  isFetchingProperty: state.handleAppActions.isFetchingProperty,
+  buildingLookupAddresses: state.handleAppActions.buildingLookupAddresses,
+  closedModal: state.handleAppActions.closedModal,
+  companyNames: state.handleAppActions.companyNames,
+  allMapData: state.handleAppActions.allMapData,
+  isFetchingMap: state.handleAppActions.isFetchingMap,
+  clickedProperty: state.handleAppActions.clickedProperty,
+  hasClickedProperty: state.handleAppActions.hasClickedProperty,
+  showTable: state.handleAppActions.showTable,
+  sidebarOwnerAddress: state.handleAppActions.sidebarOwnerAddress
+})
 
 const mapDispatchToProps = (dispatch) => bindActionCreators(actions, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage)

@@ -17,23 +17,23 @@ const port = 3001
 app.get('/data', (req, res) => {
   client.query('SELECT * FROM corp_owners ORDER BY "total-units" DESC LIMIT 100').then((r) => {
     console.log(r.rows[1])
-    res.send({data: r.rows.slice(0,1000)})
+    res.send({data: r.rows.slice(0, 1000)})
   })
 })
 
 app.get('/property', (req, res) => {
-  if (req.query.ownerAddress == "") {
+  if (req.query.ownerAddress == '') {
     res.status(400).send('Malformed Request')
   }
   let ownerAddress = req.query.ownerAddress
   console.log(ownerAddress)
   let buildings = {
     text: 'SELECT address, latitude, longitude  FROM "sf-ownership" WHERE "owner-address" = $1',
-    values: [ownerAddress],
+    values: [ownerAddress]
   }
   let companyNames = {
     text: 'SELECT DISTINCT "owner-name" FROM "sf-ownership" WHERE "owner-address" = $1',
-    values: [ownerAddress],
+    values: [ownerAddress]
   }
   let buildingQuery = client.query(buildings)
   let ownerQuery = client.query(companyNames)
@@ -52,7 +52,7 @@ app.get('/property', (req, res) => {
 
 app.get('/mapdata', (req, res) => {
   let llcQuery = {
-    text: 'SELECT  "sf-ownership"."owner-address", "sf-ownership"."owner-name", "sf-ownership".address, "sf-ownership".latitude, "sf-ownership".longitude FROM (SELECT * FROM corp_owners ORDER BY "total-units" DESC LIMIT 100) topcorp INNER JOIN "sf-ownership" on "sf-ownership"."owner-address" = topcorp."owner-address" WHERE "sf-ownership"."owner-name" ~ \'(\\w)+ (LLC|LP)\' GROUP BY "sf-ownership"."owner-address", "sf-ownership".address, "sf-ownership"."owner-name","sf-ownership".latitude, "sf-ownership".longitude ORDER BY "owner-address" DESC',
+    text: 'SELECT  "sf-ownership"."owner-address", "sf-ownership"."owner-name", "sf-ownership".address, "sf-ownership".latitude, "sf-ownership".longitude FROM (SELECT * FROM corp_owners ORDER BY "total-units" DESC LIMIT 100) topcorp INNER JOIN "sf-ownership" on "sf-ownership"."owner-address" = topcorp."owner-address" WHERE "sf-ownership"."owner-name" ~ \'(\\w)+ (LLC|LP)\' GROUP BY "sf-ownership"."owner-address", "sf-ownership".address, "sf-ownership"."owner-name","sf-ownership".latitude, "sf-ownership".longitude ORDER BY "owner-address" DESC'
   }
   client.query(llcQuery).then((r) => {
     let ret = {}
@@ -70,10 +70,10 @@ app.get('/mapdata', (req, res) => {
   })
 })
 
-app.listen(port, function(error) {
+app.listen(port, function (error) {
   if (error) {
     console.error(error)
   } else {
-    console.info("==> 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.", port, port)
+    console.info('==> 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port)
   }
 })

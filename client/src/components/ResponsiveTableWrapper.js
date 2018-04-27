@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { debounce } from 'lodash'
 import { Table } from 'fixed-data-table-2'
-// import './ResponsiveTableWrapper.styl'
 import 'fixed-data-table-2/dist/fixed-data-table.css'
 
 // Handles all <Table> to make it responsive
@@ -16,9 +15,13 @@ class ResponsiveTableWrapper extends React.Component {
   }
 
   handleResize () {
+    const padding = this.props.padding
+    const widthOffset = window.innerWidth < 680
+      ? padding.leftRight / 2 : padding.leftRight
+
     this.setState({
-      tableWidth: window.innerWidth,
-      tableHeight: window.innerHeight
+      tableWidth: window.innerWidth - widthOffset,
+      tableHeight: window.innerHeight - padding.topBottom
     })
   }
 
@@ -70,6 +73,7 @@ ResponsiveTableWrapper.propTypes = {
 
 ResponsiveTableWrapper.defaultProps = {
   refreshRate: 200, // ms
+  padding: {topBottom: 210, leftRight: 80}
 }
 
 export default ResponsiveTableWrapper

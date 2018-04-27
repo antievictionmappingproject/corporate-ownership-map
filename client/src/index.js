@@ -7,7 +7,6 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-
 // Define the initial state properties here
 const initialAppState = {
   table: {
@@ -20,7 +19,7 @@ const initialAppState = {
   },
   propertyLookup: '',
   isFetchingProperty: false,
-  buildingLookupAddresses: [],
+  buildingLookupAddresses: []
   // errorMessage: null ignore error message for rn
 }
 

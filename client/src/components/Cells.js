@@ -11,11 +11,11 @@ export class SortHeaderCell extends React.Component {
 
   render () {
     let {children, sortKey, sortDesc, columnKey, ...props} = this.props
-  return (
-    <Cell {...props}>
-      <a onClick={this.clickFunc.bind(this)}> {children} {sortKey === columnKey && sortDesc && '⬇️ ' } {sortKey === columnKey && !sortDesc && '⬆️ '}</a>
-    </Cell>
-  )
+    return (
+      <Cell {...props}>
+        <a onClick={this.clickFunc.bind(this)}> {children} {sortKey === columnKey && sortDesc && '⬇️ ' } {sortKey === columnKey && !sortDesc && '⬆️ '}</a>
+      </Cell>
+    )
   }
 }
 
@@ -27,10 +27,8 @@ SortHeaderCell.propTypes = {
   children: PropTypes.any
 }
 
-
 export class DataCell extends React.Component {
   clickFunc () {
-    debugger
     let { data, rowIndex, columnKey } = this.props
     this.props.fetchProperties(data[rowIndex][columnKey])
   }
@@ -45,9 +43,9 @@ export class DataCell extends React.Component {
         </Cell>
       )
     } else {
-        return (
-          <Cell {...props}> {displayedData} </Cell>
-        )
+      return (
+        <Cell {...props}> {displayedData} </Cell>
+      )
     }
   }
 }
@@ -56,7 +54,7 @@ DataCell.propTypes = {
   data: PropTypes.array.isRequired,
   rowIndex: PropTypes.number,
   columnKey: PropTypes.string,
- 
-  //actions
-  fetchProperties: PropTypes.func.isRequired,
+
+  // actions
+  fetchProperties: PropTypes.func.isRequired
 }

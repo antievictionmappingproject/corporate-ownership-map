@@ -1,27 +1,34 @@
 import React from 'react'
+import { Column, Cell, Table } from 'fixed-data-table-2'
+import { DataCell } from './Cells'
+import ResponsiveTableWrapper from './ResponsiveTableWrapper'
 
 class CompanySideList extends React.Component {
   render () {
-    debugger
+    let data = this.props.companyNames
     return (
-      <div
-        style={{width: '25%',
-          position: 'fixed',
-          height: '100%',
-          top: 0,
-          right: 0,
-          'overflow-y':'auto',
-          }}
+      <div style={{width: '38%',
+        height: '90%',
+        position: 'fixed',
+        top: 0,
+        right: 0}}
       >
-        <h2> Companies at {this.props.ownerAddress} </h2>
-        <ul>
-          {this.props.companyNames.map(function(listValue){
-            return <li>{listValue['owner-name']}</li>
-          })}
-        </ul>
-        <button onClick={this.props.backToTable.bind(this)}>
-        Back
-      </button>
+        <ResponsiveTableWrapper
+          rowHeight={50}
+          headerHeight={50}
+          rowsCount={data.length}
+        >
+          <Column
+            columnKey='owner-name'
+            header={<Cell> Company Names </Cell>}
+            cell={<DataCell data={data} />}
+            flexGrow={0.5}
+            width={1}
+          />
+        </ResponsiveTableWrapper>
+          <button onClick={this.props.backToTable.bind(this)}>
+            Back
+          </button>
       </div>
     )
   }

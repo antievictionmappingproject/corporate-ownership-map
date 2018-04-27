@@ -54,7 +54,7 @@ export class MainPage extends React.Component {
     }
 
     if (!isFetchingProperty && companyNames && companyNames.length > 0 && !showTable) {
-      sidebar = <CompanySideList companyNames={companyNames} ownerAddress={sidebarOwnerAddress} backToTable={this.props.backToTable} />
+      sidebar = <CompanySideList companyNames={companyNames} backToTable={this.props.backToTable} />
     }
 
     if (hasLocalFeatures) {
@@ -116,7 +116,9 @@ export class MainPage extends React.Component {
             {popup}
           </Map>
         </div>
-        {sidebar}
+        <div style={{height: '100%', float: 'right'}}>
+          {sidebar}
+        </div>
       </div>
     )
   }

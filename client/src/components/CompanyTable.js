@@ -20,7 +20,7 @@ class CompanyTable extends React.Component {
     const { isFetching, data, filterString, sortKey, sortDesc } = this.props.table
     const { fetchProperties, sortBy } = this.props
 
-    const headerCellProps = { sortBy, sortKey, sortDesc }
+    const headerCellProps = {sortBy, sortKey, sortDesc}
     return (
       <div style={{width: '38%',
         position: 'fixed',

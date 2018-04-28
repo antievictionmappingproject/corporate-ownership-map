@@ -1,4 +1,18 @@
+@import url('./components/data-table.css');
+@font-face{
+    font-family: 'cartograph';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./fonts/cartograph-mono-cf.otf') format('opentype');
+}
+
+body {
+  font-family: 'cartograph';
+  background-color: #505050;
+}
+
 .map-container {
   height: 400px;
   width: 100%;
 }
+

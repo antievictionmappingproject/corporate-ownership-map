@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Cell } from 'fixed-data-table-2'
-import 'fixed-data-table-2/dist/fixed-data-table.css'
 
 // Stateless cell components for Table component
 export class SortHeaderCell extends React.Component {
@@ -12,7 +11,7 @@ export class SortHeaderCell extends React.Component {
   render () {
     let {children, sortKey, sortDesc, columnKey, ...props} = this.props
     return (
-      <Cell {...props}>
+      <Cell {...props} className='header-cell'>
         <a onClick={this.clickFunc.bind(this)}> {children} {sortKey === columnKey && sortDesc && '⬇️ ' } {sortKey === columnKey && !sortDesc && '⬆️ '}</a>
       </Cell>
     )
@@ -36,7 +35,7 @@ export class DataCell extends React.Component {
   render () {
     const {data, rowIndex, columnKey, ...props} = this.props
     let displayedData = data[rowIndex][columnKey]
-    if (columnKey == 'owner-address') {
+    if (columnKey === 'owner-address') {
       return (
         <Cell {...props}>
           <a onClick={this.clickFunc.bind(this)}> {displayedData} </a>

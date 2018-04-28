@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import App from './containers/App'
 import configureStore from './store/configureStore'
 import dotenv from 'dotenv'
+import './styles/index.css'
 
 dotenv.config()
 

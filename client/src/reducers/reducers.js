@@ -13,7 +13,8 @@ function handleAppActions (state = {}, action) {
         isFetchingProperty: false,
         buildingLookupAddresses: action.data.buildings,
         companyNames: action.data.owners,
-        sidebarOwnerAddress: action.data.ownerAddress
+        sidebarOwnerAddress: action.data.ownerAddress,
+        buildings: action.data.buildings
       })
     case ACTIONS.CLOSE_MODAL:
       return Object.assign({}, state, {
@@ -35,7 +36,8 @@ function handleAppActions (state = {}, action) {
       })
     case ACTIONS.CLICK_BACK:
       return Object.assign({}, state, {
-        showTable: true
+        showTable: true,
+        buildings: [],
       })
 
     case ACTIONS.SET_ERROR_MESSAGE:

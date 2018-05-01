@@ -21,7 +21,6 @@ const initialAppState = {
   propertyLookup: '',
   isFetchingProperty: false,
   buildingLookupAddresses: []
-  // errorMessage: null ignore error message for rn
 }
 
 const store = configureStore(initialAppState)

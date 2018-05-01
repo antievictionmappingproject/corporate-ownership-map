@@ -10,21 +10,21 @@ export const ACTIONS = keymirror({
   REQUEST_PROPERTY_DATA: null,
   RECEIVE_PROPERTY_DATA: null,
   CLOSE_MODAL: null,
-  REQUEST_MAP_DATA:null,
-  RECEIVE_MAP_DATA:null,
-  CLICK_PROPERTY:null,
-  CLICK_BACK:null,
-  /*
+  REQUEST_MAP_DATA: null,
+  RECEIVE_MAP_DATA: null,
+  CLICK_PROPERTY: null,
+  CLICK_BACK: null,
+
   SET_ERROR_MESSAGE: null,
   RESET_ERROR_MESSAGE: null
-*/
+
 })
 
 function handleResponse (response) {
   if (response.status >= 200 && response.status < 300) {
     return response.json()
   }
- //throw new Error(formatErrorMessage(response))
+  // throw new Error(formatErrorMessage(response))
 }
 
 function formatErrorMessage (res) {
@@ -34,7 +34,7 @@ function formatErrorMessage (res) {
 // Error action that is dispatched on failed fetch requests
 function errorAction (error) {
   return {
-    //type: ACTIONS.SET_ERROR_MESSAGE,
+    type: ACTIONS.SET_ERROR_MESSAGE,
     error: true,
     errorMessage: error.message
   }
@@ -55,7 +55,7 @@ function errorAction (error) {
 //      Default success action: {type: opts.types.receive, data: data}
 //  }
 const apiProps = {
-  url: "/data",
+  url: '/data',
   types: {
     request: ACTIONS.REQUEST_COMPANY_DATA,
     receive: ACTIONS.RECEIVE_COMPANY_DATA
@@ -63,15 +63,15 @@ const apiProps = {
 }
 
 const mapAPIProps = {
-  url: "/mapdata",
+  url: '/mapdata',
   types: {
     request: ACTIONS.REQUEST_MAP_DATA,
     receive: ACTIONS.RECEIVE_MAP_DATA
   }
 }
-function fetchPropertyOpts(base, queryParams) {
+function fetchPropertyOpts (base, queryParams) {
   return {
-    url: base + "?" + querystring.stringify(queryParams),
+    url: base + '?' + querystring.stringify(queryParams),
     types: {
       request: ACTIONS.REQUEST_PROPERTY_DATA,
       receive: ACTIONS.RECEIVE_PROPERTY_DATA
@@ -83,13 +83,12 @@ function fetchDispatch (opts) {
   return (dispatch) => {
     dispatch({ type: opts.types.request })
 
-  return fetch(opts.url, { headers: opts.headers || {} })
-    .then(handleResponse)
-    .then((data) => { // Dispatch the recevied action with type and data
-      debugger
-      const obj = opts.onReceived ? opts.onReceived(data) : { data }
-      return dispatch(Object.assign({ type: opts.types.receive }, obj))
-    })//.catch((error) => dispatch(errorAction(error)))
+    return fetch(opts.url, { headers: opts.headers || {} })
+      .then(handleResponse)
+      .then((data) => { // Dispatch the recevied action with type and data
+        const obj = opts.onReceived ? opts.onReceived(data) : { data }
+        return dispatch(Object.assign({ type: opts.types.receive }, obj))
+      }).catch((error) => dispatch(errorAction(error)))
   }
 }
 
@@ -112,7 +111,7 @@ function sortBy (sortKey) {
   }
 }
 
-function filterBy (filterString)  {
+function filterBy (filterString) {
   return {
     type: ACTIONS.FILTER_COMPANY_DATA,
     filterString
@@ -121,13 +120,13 @@ function filterBy (filterString)  {
 
 function backToTable () {
   return {
-    type: ACTIONS.CLICK_BACK,
+    type: ACTIONS.CLICK_BACK
   }
 }
 
 function closeModal () {
   return {
-    type: ACTIONS.CLOSE_MODAL,
+    type: ACTIONS.CLOSE_MODAL
   }
 }
 
@@ -152,7 +151,7 @@ function shouldFetchMapData ({handleAppActions}) {
   return (!handleAppActions.isFetchingMap)
 }
 
-function fetchMapData() {
+function fetchMapData () {
   return (dispatch, getState) => {
     if (shouldFetchData(getState())) {
       return dispatch(fetchDispatch(mapAPIProps))
@@ -160,11 +159,11 @@ function fetchMapData() {
   }
 }
 
-function propertyOnClick(propertyObj) {
+function propertyOnClick (propertyObj) {
   return {
     type: ACTIONS.CLICK_PROPERTY,
     data: propertyObj
   }
 }
 
-export default { fetchData, sortBy, filterBy, fetchProperties, closeModal, fetchMapData, propertyOnClick , backToTable}
+export default { fetchData, sortBy, filterBy, fetchProperties, closeModal, fetchMapData, propertyOnClick, backToTable}

@@ -13,15 +13,15 @@ function handleAppActions (state = {}, action) {
         isFetchingProperty: false,
         buildingLookupAddresses: action.data.buildings,
         companyNames: action.data.owners,
-        sidebarOwnerAddress: action.data.ownerAddress,
+        sidebarOwnerAddress: action.data.ownerAddress
       })
     case ACTIONS.CLOSE_MODAL:
       return Object.assign({}, state, {
-        closedModal: true,
+        closedModal: true
       })
     case ACTIONS.REQUEST_MAP_DATA:
       return Object.assign({}, state, {
-        isFetchingMap: true,
+        isFetchingMap: true
       })
     case ACTIONS.RECEIVE_MAP_DATA:
       return Object.assign({}, state, {
@@ -31,11 +31,16 @@ function handleAppActions (state = {}, action) {
     case ACTIONS.CLICK_PROPERTY:
       return Object.assign({}, state, {
         hasClickedProperty: true,
-        clickedProperty: action.data,
+        clickedProperty: action.data
       })
     case ACTIONS.CLICK_BACK:
       return Object.assign({}, state, {
-        showTable: true,
+        showTable: true
+      })
+
+    case ACTIONS.SET_ERROR_MESSAGE:
+      return Object.assign({}, state, {
+        error: true,
       })
     default:
       return state
@@ -47,12 +52,12 @@ function handleTableActions (state, action) {
     case ACTIONS.REQUEST_COMPANY_DATA:
       return { isFetching: true }
     case ACTIONS.RECEIVE_COMPANY_DATA:
-        return {
-          isFetching: false,
-          data: action.data.data,
-          allData: action.data.data,
-          filterString: "",
-        }
+      return {
+        isFetching: false,
+        data: action.data.data,
+        allData: action.data.data,
+        filterString: ''
+      }
     case ACTIONS.FILTER_COMPANY_DATA:
       return {
         filterString: action.filterString.toLowerCase(),
@@ -82,7 +87,7 @@ function sort (data, sortKey, sortDesc) {
   })
 }
 
-function filter(data, filterString) {
+function filter (data, filterString) {
   if (typeof data !== 'undefined' && data.length > 0) {
     return data.filter((d) => {
       return d['owner-address'].toLowerCase().includes(filterString)
@@ -94,10 +99,9 @@ function tableReducer (state = {}, action) {
   return Object.assign({}, state, handleTableActions(state, action))
 }
 
-
 const rootReducer = combineReducers({
   handleAppActions,
-  'table': tableReducer,
+  'table': tableReducer
 })
 
 export default rootReducer

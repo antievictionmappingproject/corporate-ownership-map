@@ -28,14 +28,17 @@ export class MainPage extends React.Component {
   }
 
   render () {
-    let { isFetchingProperty, isFetchingMap, allMapData, clickedProperty, hasClickedProperty, companyNames, showTable, sidebarOwnerAddress } = this.props
+    let { isFetchingProperty, isFetchingMap, allMapData, clickedProperty, hasClickedProperty, companyNames, showTable, sidebarOwnerAddress, error } = this.props
     let { hasLocalFeatures, cachedFeatures, cachedPaint } = this.state
     let features = []
     let stops = []
     let k = 0
     let paint = {}
     let popup = <Feature />
-    let sidebar = <CompanyTable {...this.props} />
+    let sidebar = <div style={{ 'textAlign': 'center', 'width':'100%' }}> <h1> Error fetching assets from server </h1> </div>
+    if (error !== true) {
+      sidebar = <CompanyTable {...this.props} />
+    }
 
     if (hasClickedProperty) {
       popup = (
@@ -116,7 +119,7 @@ export class MainPage extends React.Component {
             {popup}
           </Map>
         </div>
-        <div style={{height: '100%', float: 'right'}}>
+        <div style={{height: '100%'}}>
           {sidebar}
         </div>
       </div>
@@ -128,6 +131,7 @@ const mapStateToProps = (state) => ({
   table: state.table,
   isFetchingProperty: state.handleAppActions.isFetchingProperty,
   buildingLookupAddresses: state.handleAppActions.buildingLookupAddresses,
+  error: state.handleAppActions.error,
   closedModal: state.handleAppActions.closedModal,
   companyNames: state.handleAppActions.companyNames,
   allMapData: state.handleAppActions.allMapData,

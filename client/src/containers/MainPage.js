@@ -50,13 +50,22 @@ export class MainPage extends React.Component {
     }
 
     if (hasClickedProperty) {
+      let ownerName = clickedProperty['owner-name']
+      if (typeof ownerName === 'undefined') {
+        let info = allMapData[clickedProperty['owner-address']].filter((propertyInfo) => { 
+          if (propertyInfo.address === clickedProperty.address) {
+            return propertyInfo
+          }
+        })
+        ownerName = info[0]['owner-name']
+      }
       popup = (
         <Popup
           key={1}
           offset={[0, -50]}
           coordinates={clickedProperty.coordinates}
         >
-          Owner Name: {clickedProperty['owner-name']}
+          Owner Name: {ownerName}
           <br />
           Owner Address: {clickedProperty['owner-address']}
           <br />

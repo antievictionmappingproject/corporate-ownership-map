@@ -30,6 +30,11 @@ function handleAppActions (state = {}, action) {
         allMapData: action.data
       })
     case ACTIONS.CLICK_PROPERTY:
+      if (action.data == undefined) {
+        return Object.assign({}, state, {
+          hasClickedProperty: false
+        })
+      }
       return Object.assign({}, state, {
         hasClickedProperty: true,
         clickedProperty: action.data
@@ -37,12 +42,12 @@ function handleAppActions (state = {}, action) {
     case ACTIONS.CLICK_BACK:
       return Object.assign({}, state, {
         showTable: true,
-        buildings: [],
+        buildings: []
       })
 
     case ACTIONS.SET_ERROR_MESSAGE:
       return Object.assign({}, state, {
-        error: true,
+        error: true
       })
     default:
       return state

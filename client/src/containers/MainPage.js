@@ -34,17 +34,17 @@ export class MainPage extends React.Component {
     let stops = []
     let k = 0
     let paint = {
-      'circle-radius' : {
+      'circle-radius': {
         'base': 1.75,
         'stops': [[12, 2], [22, 180]]
       },
       'circle-color': {
         property: 'owner-address',
-        type: 'categorical',
+        type: 'categorical'
       }
     }
     let popup = <Feature />
-    let sidebar = <div style={{ 'textAlign': 'center', 'width':'100%' }}> <h1> Error fetching assets from server </h1> </div>
+    let sidebar = <div style={{ 'textAlign': 'center', 'width': '100%' }}> <h1> Error fetching assets from server </h1> </div>
     if (error !== true) {
       sidebar = <CompanyTable {...this.props} />
     }
@@ -61,6 +61,8 @@ export class MainPage extends React.Component {
           Owner Address: {clickedProperty['owner-address']}
           <br />
           Property Address: {clickedProperty.address}
+          <br />
+          <button onClick={(() => this.props.propertyOnClick())}> Back </button>
         </Popup>
       )
     }
@@ -75,18 +77,18 @@ export class MainPage extends React.Component {
     }
 
     if (buildings && buildings.length > 0) {
-        let f = buildings.map((d, i) => {
-          let propertyFeatures = {
-            'owner-address': sidebarOwnerAddress,
-            coordinates: [d.longitude, d.latitude],
-            address: d.address
-          }
-          return (
-            <Feature coordinates={[d.longitude, d.latitude]} key={i} properties={{'owner-address': sidebarOwnerAddress}} onClick={(() => this.props.propertyOnClick(propertyFeatures))} />
-          )
-        })
-        features = []
-        features.push.apply(features, f)
+      let f = buildings.map((d, i) => {
+        let propertyFeatures = {
+          'owner-address': sidebarOwnerAddress,
+          coordinates: [d.longitude, d.latitude],
+          address: d.address
+        }
+        return (
+          <Feature coordinates={[d.longitude, d.latitude]} key={i} properties={{'owner-address': sidebarOwnerAddress}} onClick={(() => this.props.propertyOnClick(propertyFeatures))} />
+        )
+      })
+      features = []
+      features.push.apply(features, f)
     }
 
     if (!hasLocalFeatures && !isFetchingMap && typeof allMapData !== 'undefined') {

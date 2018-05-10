@@ -6,3 +6,8 @@ client/node_modules/
 rawdata/sf-ownership.csv
 /node_modules
 client/.env
+rawdata/
+*.tfvars
+*.tfstate
+*.backup
+.terraform/
